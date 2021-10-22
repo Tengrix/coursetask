@@ -1,10 +1,46 @@
 .App {
-  text-align: center;
+  box-sizing: border-box;
+  width: 70%;
+  margin: 0 auto;
+  font-family: Roboto,sans-serif;
+  background-color: #fff;
+  height: 100vh;
+}
+.imgPlace{
+  position:relative;
+}
+.imgPlace h1{
+  position:absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1;
+}
+.imgPlace img{
+  width: 100%;
+  height:200px;
+  position:relative;
+}
+.imgPlace nav{
+  position: absolute;
+  top: 180px;
+  left: 20px;
+  z-index: 1;
 }
 .course{
   padding: 5px;
-  border: green solid 5px;
+  text-align: start;
+  height: 210px;
 }
 .course span{
   padding-right: 10px;
+}
+.course img{
+  height: 150px;
+  width: 150px;
+}
+.pages{
+  background-color: blue;
+}
+.sort{
+  text-align: end;
 }

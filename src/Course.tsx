@@ -1,5 +1,5 @@
 import {coursesStateType} from "./App";
-import {Link, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 
 type coursesType = {
     courses: coursesStateType[]
@@ -8,7 +8,7 @@ type coursesType = {
 const Course = ({courses}:coursesType) =>{
     const {courseId} = useParams<{courseId:string}>()
     return(
-        <div>
+        <div className={'course'}>
             {courses.map(el=><div key={el.id}>
                 {el.id===+courseId?
                     <div>
