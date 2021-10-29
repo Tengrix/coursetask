@@ -1,37 +1,56 @@
 import {useState} from "react";
 import {Link} from "react-router-dom";
 import {coursesStateType} from "./App";
+import s from 'Paginator.module.css'
+
 type paginationType = {
-    courses:coursesStateType[]
+    courses: coursesStateType[];
+    editCourse: (id: number) => void;
 }
-const Pagination = ({courses}:paginationType) =>{
-    const [portionNumber,setPortionNumber] = useState<number>(1)
+const Pagination = ({courses, editCourse}: paginationType) => {
+    const [portionNumber, setPortionNumber] = useState<number>(1)
     const portionSize = 2;
     let pagesCount = Math.ceil(courses.length / portionSize)
     const pages = []
-    for(let i = 1; i <= pagesCount; i++){
+    for (let i = 1; i <= pagesCount; i++) {
         pages.push(i)
     }
     let portionCount = Math.ceil(pagesCount / portionSize)
-    const leftPortionPageNumber = (portionNumber - 1) * portionSize+1
+    const leftPortionPageNumber = (portionNumber - 1) * portionSize + 1
     const rightPortionPageNumber = portionNumber * portionSize
     return (
-        <div>
-            {courses.filter((el,i)=> i >= leftPortionPageNumber-1 && i <= rightPortionPageNumber-1).map(el =>
-                <div key={el.id} className={'course'}>
-                    <img src={`${el.picOfCourse}`} alt=""/>
-                    <b>Name of course:</b>
-                    <Link  to={`/course/${el.id}`}>
-                        {el.name}
-                    </Link>
-                    <div><b>Course description:</b> {el.description}</div>
-                    <div><b>Course price:</b> {el.price}$</div>
-                    <div><b>Date of beginning:</b> {el.dateOfBeginning}</div>
-                </div>
-            )}
-            {portionNumber > 1 && <button onClick={()=>{setPortionNumber(portionNumber-1)}}>prev</button>}
-            {pages.map(el=> <button className={el===portionNumber? 'pages':''} key={el} onClick={()=>setPortionNumber(el)}>{el}</button>)}
-            {portionCount >= portionNumber && <button onClick={()=>{setPortionNumber(portionNumber+1)}}>next</button>}
+        <div className="container">
+            <div className="row">
+                {courses.filter((el, i) => i >= leftPortionPageNumber - 1 && i <= rightPortionPageNumber - 1).map(el =>
+                    <div className="col" key={el.id}>
+                        <div  className={'course'}>
+                            <Link to={`/course/${el.id}`}>
+                                <img src={`${el.picOfCourse}`} alt=""/>
+                            </Link>
+                        </div>
+                        <div className="col">
+                            <b>Name of course:</b>
+                            {el.name}
+                            <div><b>Course description:</b> {el.description}</div>
+                            <div><b>Course price:</b> {el.price}$</div>
+                            <div><b>Date of beginning:</b> {el.dateOfBeginning}</div>
+                            <div>
+                                <button onClick={() => editCourse(el.id)}>del</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+            <div className={'pagination'}>
+                {portionNumber > 1 && <button onClick={() => {
+                    setPortionNumber(portionNumber - 1)
+                }}>prev</button>}
+                {pages.map(el => <button className={el === portionNumber ? 'pages' : ''} key={el}
+                                         onClick={() => setPortionNumber(el)}>{el}</button>)}
+                {portionCount >= portionNumber && <button onClick={() => {
+                    setPortionNumber(portionNumber + 1)
+                }}>next</button>}
+            </div>
 
         </div>
     )

@@ -4,10 +4,11 @@ import {useEffect, useState} from "react";
 import Pagination from "./Pagination";
 
 type coursesType = {
-    courses: coursesStateType[]
-    setSortType: (e: string) => void
+    courses: coursesStateType[];
+    setSortType: (e: string) => void;
+    editCourse:(id:number)=>void;
 }
-const Home = ({courses, setSortType}: coursesType) => {
+const Home = ({courses, setSortType,editCourse}: coursesType) => {
     return (
         <div>
             <div className={'sort'}>
@@ -17,7 +18,10 @@ const Home = ({courses, setSortType}: coursesType) => {
                 <option value={'date'}>Newest</option>
             </select>
             </div>
-            <Pagination courses={courses}/>
+            <Pagination
+                editCourse={editCourse}
+                courses={courses}
+            />
         </div>
     )
 }

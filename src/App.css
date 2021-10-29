@@ -20,11 +20,16 @@
   height:200px;
   position:relative;
 }
-.imgPlace nav{
+.imgPlace span{
   position: absolute;
-  top: 180px;
+  top: 140px;
   left: 20px;
   z-index: 1;
+}
+.mainMenu{
+  text-decoration: none;
+  color: black;
+  font-size: 20px;
 }
 .course{
   padding: 5px;
@@ -35,12 +40,18 @@
   padding-right: 10px;
 }
 .course img{
-  height: 150px;
-  width: 150px;
+  height: 200px;
+  width: 200px;
 }
 .pages{
   background-color: blue;
 }
 .sort{
   text-align: end;
+}
+.pagination{
+  margin-top: 30px;
+}
+.newCourse{
+  margin-top: 10px;
 }
