@@ -1,22 +1,25 @@
 {
   "files": {
-    "main.css": "/coursetask/static/css/main.7ddd8a01.chunk.css",
-    "main.js": "/coursetask/static/js/main.74a559bc.chunk.js",
-    "main.js.map": "/coursetask/static/js/main.74a559bc.chunk.js.map",
-    "runtime-main.js": "/coursetask/static/js/runtime-main.aa13ef5e.js",
-    "runtime-main.js.map": "/coursetask/static/js/runtime-main.aa13ef5e.js.map",
-    "static/js/2.f44f9eba.chunk.js": "/coursetask/static/js/2.f44f9eba.chunk.js",
-    "static/js/2.f44f9eba.chunk.js.map": "/coursetask/static/js/2.f44f9eba.chunk.js.map",
-    "static/js/3.b84fc60c.chunk.js": "/coursetask/static/js/3.b84fc60c.chunk.js",
-    "static/js/3.b84fc60c.chunk.js.map": "/coursetask/static/js/3.b84fc60c.chunk.js.map",
+    "main.css": "/coursetask/static/css/main.f7050771.chunk.css",
+    "main.js": "/coursetask/static/js/main.8730a0f3.chunk.js",
+    "main.js.map": "/coursetask/static/js/main.8730a0f3.chunk.js.map",
+    "runtime-main.js": "/coursetask/static/js/runtime-main.c6404974.js",
+    "runtime-main.js.map": "/coursetask/static/js/runtime-main.c6404974.js.map",
+    "static/css/2.4659568d.chunk.css": "/coursetask/static/css/2.4659568d.chunk.css",
+    "static/js/2.2cf82236.chunk.js": "/coursetask/static/js/2.2cf82236.chunk.js",
+    "static/js/2.2cf82236.chunk.js.map": "/coursetask/static/js/2.2cf82236.chunk.js.map",
+    "static/js/3.64f63973.chunk.js": "/coursetask/static/js/3.64f63973.chunk.js",
+    "static/js/3.64f63973.chunk.js.map": "/coursetask/static/js/3.64f63973.chunk.js.map",
     "index.html": "/coursetask/index.html",
-    "static/css/main.7ddd8a01.chunk.css.map": "/coursetask/static/css/main.7ddd8a01.chunk.css.map",
-    "static/js/2.f44f9eba.chunk.js.LICENSE.txt": "/coursetask/static/js/2.f44f9eba.chunk.js.LICENSE.txt"
+    "static/css/2.4659568d.chunk.css.map": "/coursetask/static/css/2.4659568d.chunk.css.map",
+    "static/css/main.f7050771.chunk.css.map": "/coursetask/static/css/main.f7050771.chunk.css.map",
+    "static/js/2.2cf82236.chunk.js.LICENSE.txt": "/coursetask/static/js/2.2cf82236.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.aa13ef5e.js",
-    "static/js/2.f44f9eba.chunk.js",
-    "static/css/main.7ddd8a01.chunk.css",
-    "static/js/main.74a559bc.chunk.js"
+    "static/js/runtime-main.c6404974.js",
+    "static/css/2.4659568d.chunk.css",
+    "static/js/2.2cf82236.chunk.js",
+    "static/css/main.f7050771.chunk.css",
+    "static/js/main.8730a0f3.chunk.js"
   ]
 }
