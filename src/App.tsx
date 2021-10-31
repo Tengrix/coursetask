@@ -70,6 +70,8 @@ function App() {
     const [find, setFind] = useState<boolean>(false)
     const [totalCountOfImg, setTotalCountOfImg] = useState<number>(1)
     const [listOfImg, setListOfImg] = useState([])
+    const [pic, setPic] = useState<File>()
+
     let clientId = 'TjmARGkpjfymTRCvG-FSEMuhTEz4V6_oSpITSpqmmEg'
 
 
@@ -124,10 +126,8 @@ function App() {
         }
         setState([...state, newCourse])
     }
-    const uploadPic = (img: string, title: string, pageNumber: number, per_page:number) => {
-        if (img) {
-            const data = new FormData()
-            data.append('image', img)
+    const uploadPic = (pic:string ,title: string, pageNumber: number, per_page:number) => {
+        debugger
             axios.get(`https://api.unsplash.com/search/photos?page=${pageNumber}&per_page=${per_page}&query=${title}&client_id=${clientId}`)
                 .then(res => {
                     debugger
@@ -135,10 +135,11 @@ function App() {
                     setTotalCountOfImg(res.data.total)
                 })
                 .catch(err => console.log(err));
-        }
+
         setFind(true)
     }
     const getPic = (id: string) => {
+        debugger
         const newPic = listOfImg.filter((el: DataType) => el.id === id)
         setListOfImg(newPic)
         // @ts-ignore
@@ -187,6 +188,7 @@ function App() {
                                 totalCountOfImg={totalCountOfImg}
                                 listOfImg={listOfImg}
                                 getPic={getPic}
+                                pic={pic}
                             />
                         </Route>
                     </Switch>

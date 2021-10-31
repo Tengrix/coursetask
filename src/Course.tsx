@@ -9,7 +9,7 @@ type courseType = {
     changeDate: (date: string, id: number) => void;
 }
 
-const Course = ({course, changePrice, changeDescription, changeDate}: courseType) => {
+const Course = ({course, changePrice,changeDescription,changeDate}: courseType) => {
     const [edit, setEdit] = useState<boolean>(false)
     const [newPrice, setNewPrice] = useState<number>(course.price)
     const [newDes, setNewDes] = useState<string>(course.description)
@@ -25,7 +25,7 @@ const Course = ({course, changePrice, changeDescription, changeDate}: courseType
             <div>
                 <div><b>Description:</b> {edit ? <div> <textarea value={newDes}
                                                                  onChange={event => setNewDes(event.currentTarget.value)}/>
-                    </div> : course.description}
+                </div> : course.description}
                 </div>
                 <div><b>Price:</b> {edit ? <input type="number" value={newPrice}
                                                   onChange={event => setNewPrice(+event.currentTarget.value)}/> : newPrice}$
