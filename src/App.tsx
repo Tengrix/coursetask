@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import {BrowserRouter as Router, Link, Route, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Link, Route, Switch, useHistory} from "react-router-dom";
 import Courses from "./Courses";
 import Home from "./Home";
 import NewCourse, {DataType} from "./NewCourse";
@@ -15,6 +15,7 @@ export type coursesStateType = {
     dateOfBeginning: string;
     picOfCourse: string;
 }
+
 function App() {
     const [state, setState] = useState<coursesStateType[]>([
         {
@@ -71,7 +72,7 @@ function App() {
     const [totalCountOfImg, setTotalCountOfImg] = useState<number>(1)
     const [listOfImg, setListOfImg] = useState([])
     const [pic, setPic] = useState<File>()
-
+    const history = useHistory()
     let clientId = 'TjmARGkpjfymTRCvG-FSEMuhTEz4V6_oSpITSpqmmEg'
 
 
@@ -126,35 +127,33 @@ function App() {
         }
         setState([...state, newCourse])
     }
-    const uploadPic = (pic:string ,title: string, pageNumber: number, per_page:number) => {
-        debugger
-            axios.get(`https://api.unsplash.com/search/photos?page=${pageNumber}&per_page=${per_page}&query=${title}&client_id=${clientId}`)
-                .then(res => {
-                    debugger
-                    setListOfImg(res.data.results)
-                    setTotalCountOfImg(res.data.total)
-                })
-                .catch(err => console.log(err));
-
+    const uploadPic = (pic: string, title: string, pageNumber: number, per_page: number) => {
+        axios.get(`https://api.unsplash.com/search/photos?page=${pageNumber}&per_page=${per_page}&query=${title}&client_id=${clientId}`)
+            .then(res => {
+                setListOfImg(res.data.results)
+                setTotalCountOfImg(res.data.total)
+            })
+            .catch(err => console.log(err));
         setFind(true)
     }
     const getPic = (id: string) => {
-        debugger
         const newPic = listOfImg.filter((el: DataType) => el.id === id)
         setListOfImg(newPic)
         // @ts-ignore
         setPic(newPic[0].urls.full)
+        setFind(false)
+
     }
     return (
         <div className={'App'}>
-            <Router>
-                <div className={'imgPlace'}>
-                    <img className="img-fluid" src="https://media.foxford.ru/wp-content/uploads/2020/02/%D0%B8%D1%82%D0%B2%D1%83%D0%B7.jpg"
-                         alt=""/>
-                    <h1 style={{color:"black"}} className="display-4">
-                        IT-Courses
-                    </h1>
-                    <span>
+            <div className={'imgPlace'}>
+                <img className="img-fluid"
+                     src="https://media.foxford.ru/wp-content/uploads/2020/02/%D0%B8%D1%82%D0%B2%D1%83%D0%B7.jpg"
+                     alt=""/>
+                <h1 style={{color: "black"}} className="display-4">
+                    IT-Courses
+                </h1>
+                <span>
                     <nav>
                         <Link to="/home" className={'mainMenu'}>Home</Link>
                     </nav>
@@ -162,38 +161,37 @@ function App() {
                         <Link to="/new-course" className={'mainMenu'}>New Course</Link>
                     </nav>
                         </span>
-                </div>
-                <div>
-                    <Switch>
-                        <Route path="/home">
-                            <Home
-                                setSortType={setSortType}
-                                courses={state}
-                                editCourse={editCourse}
-                            />
-                        </Route>
-                        <Route path="/course/:courseId">
-                            <Courses
-                                changePrice={changePrice}
-                                changeDate={changeDate}
-                                courses={state}
-                                changeDescription={changeDescription}
-                            />
-                        </Route>
-                        <Route path={'/new-course'}>
-                            <NewCourse
-                                uploadPic={uploadPic}
-                                addCourse={addCourse}
-                                find={find}
-                                totalCountOfImg={totalCountOfImg}
-                                listOfImg={listOfImg}
-                                getPic={getPic}
-                                pic={pic}
-                            />
-                        </Route>
-                    </Switch>
-                </div>
-            </Router>
+            </div>
+            <div>
+                <Switch>
+                    <Route path="/home">
+                        <Home
+                            setSortType={setSortType}
+                            courses={state}
+                            editCourse={editCourse}
+                        />
+                    </Route>
+                    <Route path="/course/:courseId">
+                        <Courses
+                            changePrice={changePrice}
+                            changeDate={changeDate}
+                            courses={state}
+                            changeDescription={changeDescription}
+                        />
+                    </Route>
+                    <Route path={'/new-course'}>
+                        <NewCourse
+                            uploadPic={uploadPic}
+                            addCourse={addCourse}
+                            find={find}
+                            totalCountOfImg={totalCountOfImg}
+                            listOfImg={listOfImg}
+                            getPic={getPic}
+                            pic={pic}
+                        />
+                    </Route>
+                </Switch>
+            </div>
         </div>
     );
 }

@@ -1,7 +1,6 @@
 import {useState} from "react";
 import {Link} from "react-router-dom";
 import {coursesStateType} from "./App";
-import s from 'Paginator.module.css'
 
 type paginationType = {
     courses: coursesStateType[];
@@ -18,6 +17,7 @@ const Pagination = ({courses, editCourse}: paginationType) => {
     let portionCount = Math.ceil(pagesCount / portionSize)
     const leftPortionPageNumber = (portionNumber - 1) * portionSize + 1
     const rightPortionPageNumber = portionNumber * portionSize
+
     return (
         <div className="container">
             <div className="row">

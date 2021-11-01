@@ -1,7 +1,8 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import SearchImg from "./SearchImg";
 import ImgPagination from "./ImgPagination";
 import CourseForm from "./CourseForm";
+import {useHistory} from "react-router-dom";
 
 export type DataType = {
     "id": string,
@@ -35,14 +36,13 @@ type NewCourseType = {
 
 const NewCourse = ({addCourse, uploadPic, find, totalCountOfImg, listOfImg, getPic, pic}: NewCourseType) => {
     const [title, setTitle] = useState<string>('')
-
     const [currentPage, setCurrentPage] = useState<number>(1)
     const per_page = 6
-
     const onPageChanged = (img: string, title: string, pageNumber: number, per_page: number) => {
         setCurrentPage(pageNumber)
         uploadPic(img,title, pageNumber, per_page)
     }
+
     return (
         <div className={'newCourse'}>
            <CourseForm
@@ -53,18 +53,17 @@ const NewCourse = ({addCourse, uploadPic, find, totalCountOfImg, listOfImg, getP
                per_page={per_page}
                pic={pic}
                addCourse={addCourse}
+               listOfImg={listOfImg}
+               getPic={getPic}
            />
-
-            <div>
-                Chose the course image below:
-            </div>
-            {listOfImg.map((el: DataType) => <span key={el.id}>
-                    <SearchImg
-                        getPic={getPic}
-                        images={el}
-                    />
-                </span>
-            )}
+            {/*{listOfImg.map((el: DataType) => <span key={el.id}>*/}
+            {/*        <SearchImg*/}
+            {/*            getPic={getPic}*/}
+            {/*            images={el}*/}
+            {/*            currentPage={currentPage}*/}
+            {/*            />*/}
+            {/*    </span>*/}
+            {/*)}*/}
             {find ?
                 <ImgPagination
                     currentPage={currentPage}

@@ -2,15 +2,23 @@ import {useState} from "react";
 import s from "./Paginator.module.css";
 
 type ImgPaginationType = {
-    pageCount:number;
-    currentPage:number;
-    portionSize:number
-    onPageChanged:(img: string, title: string, pageNumber: number, per_page:number)=>void;
-    title:string;
-    pic?:File;
-    totalCountOfImg:number;
+    pageCount: number;
+    currentPage: number;
+    portionSize: number
+    onPageChanged: (img: string, title: string, pageNumber: number, per_page: number) => void;
+    title: string;
+    pic?: File;
+    totalCountOfImg: number;
 }
-const ImgPagination = ({pageCount,currentPage,portionSize,onPageChanged,pic,title,totalCountOfImg}: ImgPaginationType) => {
+const ImgPagination = ({
+                           pageCount,
+                           currentPage,
+                           portionSize,
+                           onPageChanged,
+                           pic,
+                           title,
+                           totalCountOfImg
+                       }: ImgPaginationType) => {
     let pagesCount = Math.ceil(totalCountOfImg / pageCount)
     let pages = []
     for (let i = 1; i <= pagesCount; i++) {
@@ -18,22 +26,23 @@ const ImgPagination = ({pageCount,currentPage,portionSize,onPageChanged,pic,titl
     }
     let portionCount = Math.ceil(pagesCount / portionSize)
     let [portionNumber, setPortionNumber] = useState(1)
-    let leftPortionPageNumber = (portionNumber-1) * portionSize + 1
+    let leftPortionPageNumber = (portionNumber - 1) * portionSize + 1
     let rightPortionPageNumber = portionNumber * portionSize
 
-    return(
+    return (
         <div className={s.paginator}>
             <div>
                 {portionNumber > 1 &&
-                <button className={s.btn} onClick={()=> setPortionNumber(portionNumber-1)}> PREV</button>}
-                {pages.filter(el=>el >= leftPortionPageNumber && el <= rightPortionPageNumber)
+                <button className={s.btn} onClick={() => setPortionNumber(portionNumber - 1)}> PREV</button>}
+                {pages.filter(el => el >= leftPortionPageNumber && el <= rightPortionPageNumber)
                     .map((el) => {
                         return <span key={el}>
-                        <button onClick={()=>onPageChanged(`${pic}`,title,el, pageCount)} className= {currentPage === el ? s.selectedPage : ''}>{el}</button>
+                        <button onClick={() => onPageChanged(`${pic}`, title, el, pageCount)}
+                                className={currentPage === el ? s.selectedPage : ''}>{el}</button>
                     </span>
                     })}
                 {portionCount > portionNumber &&
-                <button className={s.btn} onClick={()=> setPortionNumber(portionNumber+1)}>NEXT</button>}
+                <button className={s.btn} onClick={() => setPortionNumber(portionNumber + 1)}>NEXT</button>}
             </div>
         </div>
     )
