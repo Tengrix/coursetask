@@ -1,21 +1,23 @@
 import {useForm} from "react-hook-form";
 import s from './CourseForm.module.css'
-import {DataType} from "./NewCourse";
 import SearchImg from "./SearchImg";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import queryString from "querystring";
 import {useHistory} from "react-router-dom";
+import ImgPagination from "./ImgPagination";
+import {DataType} from "./api/api";
 
 type CourseFormType = {
-    uploadPic: (pic: string, title: string, pageNumber: number, per_page: number) => void;
-    title: string;
+    uploadPic: (title: string, pageNumber: number, per_page: number) => void;
     currentPage: number;
     per_page: number;
-    setTitle: (title: string) => void;
-    pic?: File;
+    pic?: string;
     addCourse: (name: string, price: number, date: string, description: string, pic: string) => void
     getPic: (id: string) => void;
     listOfImg: DataType[];
+    find:boolean
+    totalCountOfImg:number;
+    onPageChanged:(title: string, pageNumber: number, per_page: number)=>void;
 }
 type ReactHookFormType = {
     name: string;
@@ -24,21 +26,29 @@ type ReactHookFormType = {
     description: string;
     pic: string;
 }
-const CourseForm = ({uploadPic,title,currentPage,per_page,setTitle,pic,addCourse,getPic,listOfImg}: CourseFormType) => {
-    const {register, handleSubmit, formState: {errors}} = useForm<ReactHookFormType>()
+const CourseForm = ({uploadPic,currentPage,per_page,pic,addCourse,getPic,listOfImg,find,totalCountOfImg,onPageChanged}: CourseFormType) => {
+    const {register, handleSubmit,setValue ,formState: {errors}} = useForm<ReactHookFormType>(    )
+    const [title, setTitle] = useState<string>('')
     const history = useHistory()
     const onSubmit = (data: ReactHookFormType) => {
         addCourse(data.name, data.price, data.date, data.description, `${pic}`)
     }
     useEffect(()=>{
-        debugger
         const parsed = queryString.parse(history.location.search.substr(1))
         let pages = currentPage
-        if(parsed.pages) pages = Number(parsed.pages)
-        console.log(pages)
-        uploadPic(`${pic}`,title,pages,per_page)
-    },[currentPage,title])
+        let urlTitle = title
+        if(!!parsed.page) pages = Number(parsed.page)
+        if(!!parsed.title) urlTitle = parsed.title as string
+        uploadPic(urlTitle, pages, per_page)
+    },[])
 
+    useEffect(() => {
+        history.push({
+            pathname: '/new-course',
+            search: `?title=${title?title:null}&page=${currentPage}`
+        })
+    }, [currentPage,title])
+    console.log(title)
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="input-group mb-3">
@@ -79,7 +89,7 @@ const CourseForm = ({uploadPic,title,currentPage,per_page,setTitle,pic,addCourse
                 <input onChange={(event => setTitle(event.currentTarget.value))} type="text" className="form-control"
                        placeholder="Course image"
                        aria-label="Recipient's username" aria-describedby="button-addon2"/>
-                <button disabled={title === ''} onClick={() => uploadPic(`${pic}`, title, currentPage, per_page)}
+                <button disabled={title === ''} onClick={() => uploadPic(title, currentPage, per_page)}
                         className="btn btn-outline-secondary" type="button" id="button-addon2">Get Images
                 </button>
             </div>
@@ -87,6 +97,7 @@ const CourseForm = ({uploadPic,title,currentPage,per_page,setTitle,pic,addCourse
                 Chose the course image below:
             </div>
             {listOfImg.map((el: DataType) => <span key={el.id}>
+
                     <SearchImg
                         getPic={getPic}
                         images={el}
@@ -95,6 +106,17 @@ const CourseForm = ({uploadPic,title,currentPage,per_page,setTitle,pic,addCourse
                     />
                 </span>
             )}
+            {find ?
+                <ImgPagination
+                    currentPage={currentPage}
+                    pageCount={per_page}
+                    onPageChanged={onPageChanged}
+                    totalCountOfImg={totalCountOfImg}
+                    portionSize={5}
+                    title={title}
+                    pic={pic}
+                /> : ''
+            }
             <div>
                 <input type="submit"/>
             </div>
