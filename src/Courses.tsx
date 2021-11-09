@@ -1,9 +1,9 @@
-import {coursesStateType} from "./App";
 import {useParams} from "react-router-dom";
 import Course from './Course'
+import {courseType} from "./redux/App-reducer";
 
 type coursesType = {
-    courses: coursesStateType[];
+    courses: courseType[];
     changePrice:(value:number, id:number)=>void;
     changeDescription:(description:string, id:number)=>void;
     changeDate: (date: string, id: number) => void;

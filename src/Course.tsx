@@ -1,15 +1,15 @@
-import {coursesStateType} from "./App";
 import {useParams} from "react-router-dom";
 import {useState} from "react";
+import {courseType} from "./redux/App-reducer";
 
-type courseType = {
-    course: coursesStateType;
+type CourseType = {
+    course: courseType;
     changePrice: (value: number, id: number) => void;
     changeDescription: (description: string, id: number) => void;
     changeDate: (date: string, id: number) => void;
 }
 
-const Course = ({course, changePrice,changeDescription,changeDate}: courseType) => {
+const Course = ({course, changePrice,changeDescription,changeDate}: CourseType) => {
     const [edit, setEdit] = useState<boolean>(false)
     const [newPrice, setNewPrice] = useState<number>(course.price)
     const [newDes, setNewDes] = useState<string>(course.description)

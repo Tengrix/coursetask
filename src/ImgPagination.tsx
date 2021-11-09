@@ -5,9 +5,9 @@ type ImgPaginationType = {
     pageCount: number;
     currentPage: number;
     portionSize: number
-    onPageChanged: (img: string, title: string, pageNumber: number, per_page: number) => void;
+    onPageChanged: (title: string, pageNumber: number, per_page: number) => void;
     title: string;
-    pic?: File;
+    pic?: string;
     totalCountOfImg: number;
 }
 const ImgPagination = ({
@@ -37,7 +37,7 @@ const ImgPagination = ({
                 {pages.filter(el => el >= leftPortionPageNumber && el <= rightPortionPageNumber)
                     .map((el) => {
                         return <span key={el}>
-                        <button onClick={() => onPageChanged(`${pic}`, title, el, pageCount)}
+                        <button onClick={() => onPageChanged(title, el, pageCount)}
                                 className={currentPage === el ? s.selectedPage : ''}>{el}</button>
                     </span>
                     })}

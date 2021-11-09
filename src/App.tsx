@@ -1,149 +1,95 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import {BrowserRouter as Router, Link, Route, Switch, useHistory} from "react-router-dom";
+import {Link, Route, Switch} from "react-router-dom";
 import Courses from "./Courses";
 import Home from "./Home";
-import NewCourse, {DataType} from "./NewCourse";
+import NewCourse from "./NewCourse";
 import 'bootstrap/dist/css/bootstrap.min.css'
-import axios from "axios";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "./redux/redux";
+import {appActions, courseType, getCourseImages, sortType} from "./redux/App-reducer";
+import {DataType} from "./api/api";
 
-export type coursesStateType = {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    dateOfBeginning: string;
-    picOfCourse: string;
-}
 
 function App() {
-    const [state, setState] = useState<coursesStateType[]>([
-        {
-            id: 1,
-            name: 'JS',
-            description: 'React',
-            price: 100,
-            dateOfBeginning: '2021-06-28',
-            picOfCourse: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/1200px-Unofficial_JavaScript_logo_2.svg.png'
-        },
-        {
-            id: 2,
-            name: 'Python',
-            description: 'MachineLearning',
-            price: 50,
-            dateOfBeginning: '2020-05-8',
-            picOfCourse: 'https://roboschool.pro/content/uploads/2020/06/python-940x940.png'
-        },
-        {
-            id: 3,
-            name: 'HTML',
-            description: 'Tags',
-            price: 80,
-            dateOfBeginning: '2021-06-2',
-            picOfCourse: 'https://media.proglib.io/wp-uploads/2019/03/html-output.jpg'
-        },
-        {
-            id: 4,
-            name: 'CSS',
-            description: 'Styles',
-            price: 105,
-            dateOfBeginning: '2021-06-11',
-            picOfCourse: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/CSS3_logo_and_wordmark.svg/1200px-CSS3_logo_and_wordmark.svg.png'
-        },
-        {
-            id: 5,
-            name: 'TS',
-            description: 'Types',
-            price: 101,
-            dateOfBeginning: '2020-10-5',
-            picOfCourse: 'https://res.cloudinary.com/practicaldev/image/fetch/s--6McQQU7i--/c_imagga_scale,f_auto,fl_progressive,h_900,q_auto,w_1600/https://dev-to-uploads.s3.amazonaws.com/i/j4hwcf7lntmqyha7ras5.png'
-        },
-        {
-            id: 6,
-            name: 'Java',
-            description: 'LearnJava',
-            price: 1000,
-            dateOfBeginning: '2021-10-17',
-            picOfCourse: 'https://www.comnews.ru/sites/default/files2019/articles/2021-02/Java.jpg'
-        },
-    ])
-    const [sortType, setSortType] = useState('price-high');
-    const [find, setFind] = useState<boolean>(false)
-    const [totalCountOfImg, setTotalCountOfImg] = useState<number>(1)
-    const [listOfImg, setListOfImg] = useState([])
-    const [pic, setPic] = useState<File>()
-    const history = useHistory()
-    let clientId = 'TjmARGkpjfymTRCvG-FSEMuhTEz4V6_oSpITSpqmmEg'
+    const dispatch = useDispatch()
+    const state = useSelector<AppRootStateType, courseType[]>(state => state.AppPage.course)
+    const listOfImg = useSelector<AppRootStateType, DataType[]>(state => state.AppPage.listOfImg)
+    const find = useSelector<AppRootStateType,boolean>(state=>state.AppPage.find)
+    const totalCountOfImg = useSelector<AppRootStateType,number>(state => state.AppPage.totalCountOfImg)
+    const pic = useSelector<AppRootStateType, string>(state => state.AppPage.pic)
+    const sortTypes = useSelector<AppRootStateType,sortType>(state => state.AppPage.sortTypes)
+    // const [sortType, setSortType] = useState('price-high');
 
+    console.log(state)
 
     useEffect(() => {
-        const sortByPrice = (type: any) => {
-            switch (sortType) {
-                case 'price-high':
-                    setState([...state].sort((a, b) => a.price > b.price ? -1 : 1))
+        const sortByPrice = (type:sortType) =>{
+            switch (sortTypes) {
+                case "price-low":
+                    dispatch(appActions.setCourses([...state].sort((a, b) => a.price < b.price ? -1 : 1)))
+
                     break;
-                case 'price-low':
-                    setState([...state].sort((a, b) => a.price < b.price ? -1 : 1))
+                case "price-high":
+                    dispatch(appActions.setCourses([...state].sort((a, b) => a.price > b.price ? -1 : 1)))
                     break;
-                case 'date':
-                    setState([...state].sort((a, b) => {
+                case "date":
+                    dispatch(appActions.setCourses([...state].sort((a, b) => {
                         return +new Date(a.dateOfBeginning) - +new Date(b.dateOfBeginning)
-                    }))
+                    })))
                     break;
                 default:
                     return state
             }
         }
-        sortByPrice(sortType)
-    }, [sortType])
+        // const sortByPrice = (type: any) => {
+        //     switch (sortType) {
+        //         case 'price-high':
+        //             setState([...state].sort((a, b) => a.price > b.price ? -1 : 1))
+        //             break;
+        //         case 'price-low':
+        //             setState([...state].sort((a, b) => a.price < b.price ? -1 : 1))
+        //             break;
+        //         case 'date':
+        //             setState([...state].sort((a, b) => {
+        //                 return +new Date(a.dateOfBeginning) - +new Date(b.dateOfBeginning)
+        //             }))
+        //             break;
+        //         default:
+        //             return state
+        //     }
+        // }
+        // sortByPrice(sortType)
+        sortByPrice(sortTypes)
+        console.log(sortTypes)
+    }, [sortTypes])
 
     const editCourse = (id: number) => {
-        const newArr = [...state].filter((el) => el.id !== id)
-        setState(newArr)
+        dispatch(appActions.editCourseAc(id))
     }
     const changePrice = (value: number, id: number) => {
-        let newArray = state
-            .map(t => t.id === id ? {...t, price: value} : t);
-        setState(newArray)
+        dispatch(appActions.changePrice(value, id))
     }
     const changeDescription = (description: string, id: number) => {
-        let newArray = state
-            .map(t => t.id === id ? {...t, description} : t);
-        setState(newArray)
+        dispatch(appActions.changeDescription(id, description))
     }
     const changeDate = (date: string, id: number) => {
-        let newArray = state
-            .map(t => t.id === id ? {...t, dateOfBeginning: date} : t);
-        setState(newArray)
+        dispatch(appActions.changeDate(id, date))
     }
     const addCourse = (name: string, price: number, date: string, description: string, pic: string) => {
-        let newCourse: coursesStateType = {
-            id: Math.random(),
-            name,
-            price,
-            picOfCourse: pic,
-            dateOfBeginning: date,
-            description
-        }
-        setState([...state, newCourse])
+        dispatch(appActions.addCourse(name, price, date, description, `${pic}`))
     }
-    const uploadPic = (pic: string, title: string, pageNumber: number, per_page: number) => {
-        axios.get(`https://api.unsplash.com/search/photos?page=${pageNumber}&per_page=${per_page}&query=${title}&client_id=${clientId}`)
-            .then(res => {
-                setListOfImg(res.data.results)
-                setTotalCountOfImg(res.data.total)
-            })
-            .catch(err => console.log(err));
-        setFind(true)
+    const uploadPic = (title: string, pageNumber: number, per_page: number) => {
+        dispatch(getCourseImages(title, pageNumber, per_page))
     }
     const getPic = (id: string) => {
         const newPic = listOfImg.filter((el: DataType) => el.id === id)
-        setListOfImg(newPic)
+        dispatch(appActions.setListOfImages(newPic))
         // @ts-ignore
-        setPic(newPic[0].urls.full)
-        setFind(false)
-
+        dispatch(appActions.setPic(newPic[0].urls.full))
+        dispatch(appActions.setFind(false))
     }
+    console.log(listOfImg)
     return (
         <div className={'App'}>
             <div className={'imgPlace'}>
@@ -166,7 +112,7 @@ function App() {
                 <Switch>
                     <Route path="/home">
                         <Home
-                            setSortType={setSortType}
+                            sortTypes={sortTypes}
                             courses={state}
                             editCourse={editCourse}
                         />

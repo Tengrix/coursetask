@@ -1,9 +1,9 @@
 import {useState} from "react";
 import {Link} from "react-router-dom";
-import {coursesStateType} from "./App";
+import {courseType} from "./redux/App-reducer";
 
 type paginationType = {
-    courses: coursesStateType[];
+    courses: courseType[];
     editCourse: (id: number) => void;
 }
 const Pagination = ({courses, editCourse}: paginationType) => {
