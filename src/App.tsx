@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 import {Link, Route, Switch} from "react-router-dom";
 import Courses from "./Courses";
@@ -7,7 +7,20 @@ import NewCourse from "./NewCourse";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./redux/redux";
-import {appActions, courseType, getCourseImages, sortType} from "./redux/App-reducer";
+import {
+    addNewCourse,
+    changeDates,
+    changeDescriptions,
+    changePrices,
+    courseType,
+    deleteCourse,
+    filterCourses,
+    getCourseImages,
+    setFind,
+    setListOfImages,
+    setPic,
+    sortType
+} from "./redux/App-reducer";
 import {DataType} from "./api/api";
 
 
@@ -15,79 +28,41 @@ function App() {
     const dispatch = useDispatch()
     const state = useSelector<AppRootStateType, courseType[]>(state => state.AppPage.course)
     const listOfImg = useSelector<AppRootStateType, DataType[]>(state => state.AppPage.listOfImg)
-    const find = useSelector<AppRootStateType,boolean>(state=>state.AppPage.find)
-    const totalCountOfImg = useSelector<AppRootStateType,number>(state => state.AppPage.totalCountOfImg)
+    const find = useSelector<AppRootStateType, boolean>(state => state.AppPage.find)
+    const totalCountOfImg = useSelector<AppRootStateType, number>(state => state.AppPage.totalCountOfImg)
     const pic = useSelector<AppRootStateType, string>(state => state.AppPage.pic)
-    const sortTypes = useSelector<AppRootStateType,sortType>(state => state.AppPage.sortTypes)
-    // const [sortType, setSortType] = useState('price-high');
+    const sortTypes = useSelector<AppRootStateType, sortType>(state => state.AppPage.sortTypes)
 
     console.log(state)
 
     useEffect(() => {
-        const sortByPrice = (type:sortType) =>{
-            switch (sortTypes) {
-                case "price-low":
-                    dispatch(appActions.setCourses([...state].sort((a, b) => a.price < b.price ? -1 : 1)))
-
-                    break;
-                case "price-high":
-                    dispatch(appActions.setCourses([...state].sort((a, b) => a.price > b.price ? -1 : 1)))
-                    break;
-                case "date":
-                    dispatch(appActions.setCourses([...state].sort((a, b) => {
-                        return +new Date(a.dateOfBeginning) - +new Date(b.dateOfBeginning)
-                    })))
-                    break;
-                default:
-                    return state
-            }
-        }
-        // const sortByPrice = (type: any) => {
-        //     switch (sortType) {
-        //         case 'price-high':
-        //             setState([...state].sort((a, b) => a.price > b.price ? -1 : 1))
-        //             break;
-        //         case 'price-low':
-        //             setState([...state].sort((a, b) => a.price < b.price ? -1 : 1))
-        //             break;
-        //         case 'date':
-        //             setState([...state].sort((a, b) => {
-        //                 return +new Date(a.dateOfBeginning) - +new Date(b.dateOfBeginning)
-        //             }))
-        //             break;
-        //         default:
-        //             return state
-        //     }
-        // }
-        // sortByPrice(sortType)
-        sortByPrice(sortTypes)
+        dispatch(filterCourses({course: state, sort: sortTypes}))
         console.log(sortTypes)
     }, [sortTypes])
 
-    const editCourse = (id: number) => {
-        dispatch(appActions.editCourseAc(id))
+    const delCourse = (id: number) => {
+        dispatch(deleteCourse({id: id}))
     }
     const changePrice = (value: number, id: number) => {
-        dispatch(appActions.changePrice(value, id))
+        dispatch(changePrices({value, id}))
     }
     const changeDescription = (description: string, id: number) => {
-        dispatch(appActions.changeDescription(id, description))
+        dispatch(changeDescriptions({id, des: description}))
     }
     const changeDate = (date: string, id: number) => {
-        dispatch(appActions.changeDate(id, date))
+        dispatch(changeDates({id, date}))
     }
     const addCourse = (name: string, price: number, date: string, description: string, pic: string) => {
-        dispatch(appActions.addCourse(name, price, date, description, `${pic}`))
+        dispatch(addNewCourse({name: name, price: price, date: date, description: description, pic: `${pic}`}))
     }
     const uploadPic = (title: string, pageNumber: number, per_page: number) => {
         dispatch(getCourseImages(title, pageNumber, per_page))
     }
     const getPic = (id: string) => {
         const newPic = listOfImg.filter((el: DataType) => el.id === id)
-        dispatch(appActions.setListOfImages(newPic))
-        // @ts-ignore
-        dispatch(appActions.setPic(newPic[0].urls.full))
-        dispatch(appActions.setFind(false))
+        dispatch(setListOfImages({images: newPic}))
+        dispatch(setPic({pic: newPic[0].urls.full}))
+        dispatch(setFind({value: false}))
     }
     console.log(listOfImg)
     return (
@@ -114,7 +89,7 @@ function App() {
                         <Home
                             sortTypes={sortTypes}
                             courses={state}
-                            editCourse={editCourse}
+                            delCourse={delCourse}
                         />
                     </Route>
                     <Route path="/course/:courseId">

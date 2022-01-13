@@ -1,6 +1,6 @@
-import {InferActionsType} from "./redux";
 import {Dispatch} from "react";
 import {DataType, imgAPI} from "../api/api";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 export type courseType = {
     id: number;
@@ -10,17 +10,17 @@ export type courseType = {
     dateOfBeginning: string;
     picOfCourse: string;
 }
-export type sortType = 'price-high'|'price-low'|'date'
+export type sortType = 'price-high' | 'price-low' | 'date'
 export type AppInitialStateType = {
-    course:courseType[];
-    find:boolean;
-    totalCountOfImg:number;
-    listOfImg:DataType[];
-    pic:string;
-    sortTypes:sortType
+    course: courseType[];
+    find: boolean;
+    totalCountOfImg: number;
+    listOfImg: DataType[];
+    pic: string;
+    sortTypes: sortType
 }
-const AppInitialState:AppInitialStateType = {
-    course:[
+const AppInitialState: AppInitialStateType = {
+    course: [
         {
             id: 6,
             name: 'Java',
@@ -70,156 +70,104 @@ const AppInitialState:AppInitialStateType = {
             picOfCourse: 'https://res.cloudinary.com/practicaldev/image/fetch/s--6McQQU7i--/c_imagga_scale,f_auto,fl_progressive,h_900,q_auto,w_1600/https://dev-to-uploads.s3.amazonaws.com/i/j4hwcf7lntmqyha7ras5.png'
         },
     ],
-    find:false,
-    totalCountOfImg:0,
-    listOfImg:[],
-    pic:'',
-    sortTypes:'date'
+    find: false,
+    totalCountOfImg: 0,
+    listOfImg: [],
+    pic: '',
+    sortTypes: 'date'
 }
 
-
-export const AppReducer = (state: AppInitialStateType = AppInitialState, action: ActionsType) => {
-    switch (action.type) {
-        case "EDIT":
-            return {
-                ...state,course:state.course.filter(el=>el.id !==action.id)
+const slice = createSlice({
+    name: 'AppReducer',
+    initialState: AppInitialState,
+    reducers: {
+        deleteCourse(state, action: PayloadAction<{ id: number }>) {
+            const index = state.course.findIndex(el => el.id === action.payload.id)
+            if(index > -1){
+                state.course.splice(index,1)
             }
-        case "CHANGE-PRICE":
-            debugger
-            return {
-                ...state, course:state.course.map(t => t.id === action.id ? {...t, price: action.value} : t)
+        },
+        changePrices(state, action: PayloadAction<{ value: number, id: number }>) {
+            const index = state.course.findIndex(el => el.id === action.payload.id)
+            state.course[index].price = action.payload.value
+        },
+        changeDates(state, action: PayloadAction<{ id: number, date: string }>) {
+            const index = state.course.findIndex(el => el.id === action.payload.id)
+            state.course[index].dateOfBeginning = action.payload.date
+        },
+        changeDescriptions(state, action: PayloadAction<{ id: number, des: string }>) {
+            const index = state.course.findIndex(el => el.id === action.payload.id)
+            state.course[index].description = action.payload.des
+        },
+        addNewCourse(state, action: PayloadAction<{ name: string, price: number, date: string, description: string, pic: string }>) {
+            const newCourse: courseType = {
+                id: Math.random(),
+                name: action.payload.name,
+                description: action.payload.description,
+                picOfCourse: action.payload.pic,
+                price: action.payload.price,
+                dateOfBeginning: action.payload.date
             }
-        case "CHANGE-DATE":
-            return {
-                ...state, course:state.course.map(t => t.id === action.id ? {...t, dateOfBeginning: action.date} : t)
+            state.course.push({...newCourse})
+        },
+        setListOfImages(state, action: PayloadAction<{ images: any }>) {
+            state.listOfImg = action.payload.images
+        },
+        setTotalAmountOfImages(state, action: PayloadAction<{ total: number }>) {
+            state.totalCountOfImg = action.payload.total
+        },
+        setFind(state, action: PayloadAction<{ value: boolean }>) {
+            state.find = action.payload.value
+        },
+        setPic(state, action: PayloadAction<{ pic: string }>) {
+            state.pic = action.payload.pic
+        },
+        setSort(state, action: PayloadAction<{ types: sortType }>) {
+            state.sortTypes = action.payload.types
+        },
+        filterCourses(state, action: PayloadAction<{ course: courseType[], sort:sortType }>) {
+            switch (action.payload.sort){
+                case "price-low":
+                    state.course = [...action.payload.course].sort((a, b) => a.price < b.price ? -1 : 1)
+                    break;
+                case "price-high":
+                    state.course = [...action.payload.course].sort((a, b) => a.price > b.price ? -1 : 1)
+                    break;
+                case "date":
+                    state.course = [...action.payload.course].sort((a, b) => {
+                        return +new Date(a.dateOfBeginning) - +new Date(b.dateOfBeginning)
+                    })
+                    break;
+                default:
+                    return state
             }
-        case "CHANGE-DES":
-            return {
-                ...state, course:state.course.map(t => t.id === action.id ? {...t, description: action.des} : t)
-            }
-        case "ADD":
-            const newCourse:courseType = {
-                id:Math.random(),
-                name:action.name,
-                description:action.description,
-                picOfCourse:action.pic,
-                price:action.price,
-                dateOfBeginning:action.date
-            }
-            return {
-                ...state, course:[...state.course, newCourse]
-            }
-        case "SET-IMAGES":
-            return {
-                ...state, listOfImg:action.images
-            }
-        case "SET-TOTAL-IMAGES":
-            return {
-                ...state, totalCountOfImg:action.total
-            }
-        case "SET-FIND":
-            return {
-                ...state, find: action.value
-            }
-        case "SET-PIC":
-            return {
-                ...state, pic:action.pic
-            }
-        case "SET-COURSE-TYPE":
-            return{
-                ...state, course: action.course
-            }
-        case "SET-SORT":
-            debugger
-            return {
-                ...state, sortTypes: action.types
-            }
-        default:
-            return state
+        }
     }
-}
-
-type ActionsType = InferActionsType<typeof appActions>
-
-export const appActions = {
-    editCourseAc: (id: number) => {
-        return {
-            type: 'EDIT',
-            id
-        } as const
-    },
-    changePrice: (value: number, id: number) => {
-        return {
-            type: 'CHANGE-PRICE',
-            value, id
-        } as const
-    },
-    changeDate: (id: number, date: string) => {
-        return {
-            type: 'CHANGE-DATE',
-            id, date
-        } as const
-    },
-    changeDescription: (id: number, des: string) => {
-        return {
-            type: 'CHANGE-DES',
-            id, des
-        } as const
-    },
-    addCourse:(name: string, price: number, date: string, description: string, pic: string)=>{
-        return{
-            type:'ADD',
-            name,price,date,description,pic
-        } as const
-    },
-    setListOfImages:(images:any)=>{
-        return{
-            type:'SET-IMAGES',
-            images
-        } as const
-    },
-    setTotalAmountOfImages:(total:number)=>{
-        return{
-            type:'SET-TOTAL-IMAGES',
-            total
-        } as const
-    },
-    setFind:(value:boolean)=>{
-        return{
-            type:'SET-FIND',
-            value
-        } as const
-    },
-    setPic:(pic:string)=>{
-        return{
-           type:'SET-PIC',
-           pic
-        } as const
-    },
-    setSort:(types:sortType)=>{
-        debugger
-        return{
-            type:'SET-SORT',
-            types
-        } as const
-    },
-    setCourses:(course:courseType[])=>{
-        return{
-            type:'SET-COURSE-TYPE',
-            course
-        }as const
-    }
-}
+})
+export const {
+    deleteCourse,
+    addNewCourse,
+    filterCourses,
+    setListOfImages,
+    changeDates,
+    changePrices,
+    changeDescriptions,
+    setPic,
+    setTotalAmountOfImages,
+    setSort,
+    setFind
+} = slice.actions
+export const AppReducer = slice.reducer
 
 export const getCourseImages = (title: string, pageNumber: number, per_page: number) => {
     return async (dispatch: Dispatch<any>) => {
         try {
-            const response = await imgAPI.getImages(title,pageNumber,per_page)
-            dispatch(appActions.setListOfImages(response.data.results))
-            dispatch(appActions.setTotalAmountOfImages(response.data.total))
-            dispatch(appActions.setFind(true))
+            const response = await imgAPI.getImages(title, pageNumber, per_page)
+            dispatch(setListOfImages({images: response.data.results}))
+            dispatch(setTotalAmountOfImages({total: response.data.total}))
+            dispatch(setFind({value: true}))
         } catch (e) {
-
+            console.log(`error: ${e}` )
         }
     }
 }

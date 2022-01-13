@@ -15,7 +15,6 @@ const ImgPagination = ({
                            currentPage,
                            portionSize,
                            onPageChanged,
-                           pic,
                            title,
                            totalCountOfImg
                        }: ImgPaginationType) => {

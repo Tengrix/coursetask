@@ -4,9 +4,9 @@ import {courseType} from "./redux/App-reducer";
 
 type paginationType = {
     courses: courseType[];
-    editCourse: (id: number) => void;
+    delCourse: (id: number) => void;
 }
-const Pagination = ({courses, editCourse}: paginationType) => {
+const Pagination = ({courses, delCourse}: paginationType) => {
     const [portionNumber, setPortionNumber] = useState<number>(1)
     const portionSize = 2;
     let pagesCount = Math.ceil(courses.length / portionSize)
@@ -23,7 +23,7 @@ const Pagination = ({courses, editCourse}: paginationType) => {
             <div className="row">
                 {courses.filter((el, i) => i >= leftPortionPageNumber - 1 && i <= rightPortionPageNumber - 1).map(el =>
                     <div className="col" key={el.id}>
-                        <div  className={'course'}>
+                        <div className={'course'}>
                             <Link to={`/course/${el.id}`}>
                                 <img src={`${el.picOfCourse}`} alt=""/>
                             </Link>
@@ -35,7 +35,7 @@ const Pagination = ({courses, editCourse}: paginationType) => {
                             <div><b>Course price:</b> {el.price}$</div>
                             <div><b>Date of beginning:</b> {el.dateOfBeginning}</div>
                             <div>
-                                <button onClick={() => editCourse(el.id)}>del</button>
+                                <button onClick={() => delCourse(el.id)}>del</button>
                             </div>
                         </div>
                     </div>

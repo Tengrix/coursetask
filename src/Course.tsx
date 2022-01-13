@@ -1,4 +1,3 @@
-import {useParams} from "react-router-dom";
 import {useState} from "react";
 import {courseType} from "./redux/App-reducer";
 
@@ -9,7 +8,7 @@ type CourseType = {
     changeDate: (date: string, id: number) => void;
 }
 
-const Course = ({course, changePrice,changeDescription,changeDate}: CourseType) => {
+const Course = ({course, changePrice, changeDescription, changeDate}: CourseType) => {
     const [edit, setEdit] = useState<boolean>(false)
     const [newPrice, setNewPrice] = useState<number>(course.price)
     const [newDes, setNewDes] = useState<string>(course.description)

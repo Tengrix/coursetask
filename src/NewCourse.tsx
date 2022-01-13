@@ -37,25 +37,6 @@ const NewCourse = ({addCourse, uploadPic, find, totalCountOfImg, listOfImg, getP
                totalCountOfImg={totalCountOfImg}
                onPageChanged={onPageChanged}
            />
-            {/*{listOfImg.map((el: DataType) => <span key={el.id}>*/}
-            {/*        <SearchImg*/}
-            {/*            getPic={getPic}*/}
-            {/*            images={el}*/}
-            {/*            currentPage={currentPage}*/}
-            {/*            />*/}
-            {/*    </span>*/}
-            {/*)}*/}
-            {/*{find ?*/}
-            {/*    <ImgPagination*/}
-            {/*        currentPage={currentPage}*/}
-            {/*        pageCount={per_page}*/}
-            {/*        onPageChanged={onPageChanged}*/}
-            {/*        totalCountOfImg={totalCountOfImg}*/}
-            {/*        portionSize={5}*/}
-            {/*        title={title}*/}
-            {/*        pic={pic}*/}
-            {/*    /> : ''*/}
-            {/*}*/}
         </div>
     )
 }
