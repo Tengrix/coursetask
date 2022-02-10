@@ -8,6 +8,7 @@
 }
 .imgPlace{
   position:relative;
+
 }
 .imgPlace h1{
   position:absolute;
@@ -15,10 +16,12 @@
   left: 20px;
   z-index: 1;
 }
+
 .imgPlace img{
   width: 100%;
   height:200px;
   position:relative;
+  border-radius: 20px;
 }
 .imgPlace span{
   position: absolute;
@@ -30,6 +33,9 @@
   text-decoration: none;
   color: black;
   font-size: 20px;
+}
+.mainMenu:hover{
+  color: yellow;
 }
 .course{
   padding: 5px;

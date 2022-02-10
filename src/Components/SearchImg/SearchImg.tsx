@@ -1,6 +1,6 @@
 import s from './SearchImg.module.css'
 import {useHistory} from "react-router-dom";
-import {DataType} from "./api/api";
+import {DataType} from "../../api/api";
 
 type ImgType = {
     images:DataType;

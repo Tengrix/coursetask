@@ -87,17 +87,10 @@ const slice = createSlice({
                 state.course.splice(index,1)
             }
         },
-        changePrices(state, action: PayloadAction<{ value: number, id: number }>) {
+        changeCourse(state,action:PayloadAction<{course:courseType, id:number}>){
             const index = state.course.findIndex(el => el.id === action.payload.id)
-            state.course[index].price = action.payload.value
-        },
-        changeDates(state, action: PayloadAction<{ id: number, date: string }>) {
-            const index = state.course.findIndex(el => el.id === action.payload.id)
-            state.course[index].dateOfBeginning = action.payload.date
-        },
-        changeDescriptions(state, action: PayloadAction<{ id: number, des: string }>) {
-            const index = state.course.findIndex(el => el.id === action.payload.id)
-            state.course[index].description = action.payload.des
+            state.course[index] = action.payload.course
+            state.course[index].id = action.payload.id
         },
         addNewCourse(state, action: PayloadAction<{ name: string, price: number, date: string, description: string, pic: string }>) {
             const newCourse: courseType = {
@@ -149,13 +142,11 @@ export const {
     addNewCourse,
     filterCourses,
     setListOfImages,
-    changeDates,
-    changePrices,
-    changeDescriptions,
     setPic,
     setTotalAmountOfImages,
     setSort,
-    setFind
+    setFind,
+    changeCourse
 } = slice.actions
 export const AppReducer = slice.reducer
 

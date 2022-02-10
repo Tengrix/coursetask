@@ -1,11 +1,11 @@
 import {useForm} from "react-hook-form";
 import s from './CourseForm.module.css'
-import SearchImg from "./SearchImg";
+import SearchImg from "../SearchImg/SearchImg";
 import {useEffect, useState} from "react";
 import queryString from "querystring";
 import {useHistory} from "react-router-dom";
-import ImgPagination from "./ImgPagination";
-import {DataType} from "./api/api";
+import ImgPagination from "./Pagination/ImgPagination";
+import {DataType} from "../../api/api";
 
 type CourseFormType = {
     uploadPic: (title: string, pageNumber: number, per_page: number) => void;

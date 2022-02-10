@@ -1,17 +1,15 @@
 import React, {useEffect} from 'react';
 import './App.css';
-import {Link, Route, Switch} from "react-router-dom";
-import Courses from "./Courses";
-import Home from "./Home";
-import NewCourse from "./NewCourse";
+import {Route, Switch} from "react-router-dom";
+import Courses from "./Components/All Courses/Courses";
+import MainPage from "./Components/MainPage/MainPage";
+import NewCourse from "./Components/Create New Course/NewCourse";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./redux/redux";
 import {
     addNewCourse,
-    changeDates,
-    changeDescriptions,
-    changePrices,
+    changeCourse,
     courseType,
     deleteCourse,
     filterCourses,
@@ -22,6 +20,7 @@ import {
     sortType
 } from "./redux/App-reducer";
 import {DataType} from "./api/api";
+import Header from "./Components/Header/Header";
 
 
 function App() {
@@ -43,14 +42,8 @@ function App() {
     const delCourse = (id: number) => {
         dispatch(deleteCourse({id: id}))
     }
-    const changePrice = (value: number, id: number) => {
-        dispatch(changePrices({value, id}))
-    }
-    const changeDescription = (description: string, id: number) => {
-        dispatch(changeDescriptions({id, des: description}))
-    }
-    const changeDate = (date: string, id: number) => {
-        dispatch(changeDates({id, date}))
+    const changeOldCourse = (course:courseType, id:number) => {
+        dispatch(changeCourse({course,id}))
     }
     const addCourse = (name: string, price: number, date: string, description: string, pic: string) => {
         dispatch(addNewCourse({name: name, price: price, date: date, description: description, pic: `${pic}`}))
@@ -67,26 +60,11 @@ function App() {
     console.log(listOfImg)
     return (
         <div className={'App'}>
-            <div className={'imgPlace'}>
-                <img className="img-fluid"
-                     src="https://media.foxford.ru/wp-content/uploads/2020/02/%D0%B8%D1%82%D0%B2%D1%83%D0%B7.jpg"
-                     alt=""/>
-                <h1 style={{color: "black"}} className="display-4">
-                    IT-Courses
-                </h1>
-                <span>
-                    <nav>
-                        <Link to="/home" className={'mainMenu'}>Home</Link>
-                    </nav>
-                    <nav>
-                        <Link to="/new-course" className={'mainMenu'}>New Course</Link>
-                    </nav>
-                        </span>
-            </div>
+            <Header/>
             <div>
                 <Switch>
-                    <Route path="/home">
-                        <Home
+                    <Route exact path="/">
+                        <MainPage
                             sortTypes={sortTypes}
                             courses={state}
                             delCourse={delCourse}
@@ -94,10 +72,8 @@ function App() {
                     </Route>
                     <Route path="/course/:courseId">
                         <Courses
-                            changePrice={changePrice}
-                            changeDate={changeDate}
+                            changeOldCourse={changeOldCourse}
                             courses={state}
-                            changeDescription={changeDescription}
                         />
                     </Route>
                     <Route path={'/new-course'}>

@@ -1,5 +1,5 @@
-import Pagination from "./Pagination";
-import {courseType, setSort, sortType} from "./redux/App-reducer";
+import ListOfCourses from "./ListOfCourses/ListOfCourses";
+import {courseType, setSort, sortType} from "../../redux/App-reducer";
 import {useDispatch} from "react-redux";
 
 type coursesType = {
@@ -7,10 +7,9 @@ type coursesType = {
     sortTypes: sortType
     delCourse: (id: number) => void;
 }
-const Home = ({courses, delCourse}: coursesType) => {
+const MainPage = ({courses, delCourse}: coursesType) => {
     const dispatch = useDispatch()
     const getSorting = (type: sortType) => {
-        debugger
         dispatch(setSort({types: type}))
     }
     return (
@@ -22,11 +21,11 @@ const Home = ({courses, delCourse}: coursesType) => {
                 <option value={'date'}>Newest</option>
             </select>
             </div>
-            <Pagination
+            <ListOfCourses
                 delCourse={delCourse}
                 courses={courses}
             />
         </div>
     )
 }
-export default Home;
+export default MainPage;
