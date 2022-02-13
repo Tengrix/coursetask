@@ -1,11 +1,11 @@
 import {useForm} from "react-hook-form";
 import s from './CourseForm.module.css'
-import SearchImg from "../SearchImg/SearchImg";
+import SearchImg from "./SearchImg/SearchImg";
 import {useEffect, useState} from "react";
 import queryString from "querystring";
 import {useHistory} from "react-router-dom";
 import ImgPagination from "./Pagination/ImgPagination";
-import {DataType} from "../../api/api";
+import {DataType} from "../../types/Types";
 
 type CourseFormType = {
     uploadPic: (title: string, pageNumber: number, per_page: number) => void;
@@ -27,7 +27,7 @@ type ReactHookFormType = {
     pic: string;
 }
 const CourseForm = ({uploadPic,currentPage,per_page,pic,addCourse,getPic,listOfImg,find,totalCountOfImg,onPageChanged}: CourseFormType) => {
-    const {register, handleSubmit,setValue ,formState: {errors}} = useForm<ReactHookFormType>(    )
+    const {register, handleSubmit,formState: {errors}} = useForm<ReactHookFormType>()
     const [title, setTitle] = useState<string>('')
     const history = useHistory()
     const onSubmit = (data: ReactHookFormType) => {
@@ -48,7 +48,6 @@ const CourseForm = ({uploadPic,currentPage,per_page,pic,addCourse,getPic,listOfI
             search: `?title=${title?title:null}&page=${currentPage}`
         })
     }, [currentPage,title])
-    console.log(title)
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="input-group mb-3">

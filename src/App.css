@@ -6,9 +6,11 @@
   background-color: #fff;
   height: 100vh;
 }
+.mainBlock{
+  margin-top: 20px;
+}
 .imgPlace{
   position:relative;
-
 }
 .imgPlace h1{
   position:absolute;

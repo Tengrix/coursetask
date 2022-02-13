@@ -1,6 +1,6 @@
 import {useState} from "react";
-import {courseType} from "../../redux/App-reducer";
 import {useForm} from "react-hook-form";
+import {courseType} from "../../../types/Types";
 
 type CourseType = {
     course: courseType;
@@ -8,7 +8,7 @@ type CourseType = {
 }
 
 const Course = ({course, changeOldCourse}: CourseType) => {
-    const {register, handleSubmit,formState: {errors}} = useForm();
+    const {register, handleSubmit, formState: {errors}} = useForm();
 
     const [edit, setEdit] = useState<boolean>(false)
     const saveHandler = () => {
@@ -18,7 +18,7 @@ const Course = ({course, changeOldCourse}: CourseType) => {
         setEdit(!edit)
     }
     const onSubmit = (data: any) => {
-        changeOldCourse(data,course.id)
+        changeOldCourse(data, course.id)
         saveHandler()
 
     };
@@ -27,21 +27,29 @@ const Course = ({course, changeOldCourse}: CourseType) => {
             <form onSubmit={handleSubmit(onSubmit)}>
 
                 <div>
-                    <div><b>Description:</b> {edit ?
-                        <div>
+                    <div>
+                        <b>Name: </b>
+                        {edit ?
+                            <input {...register('name')} placeholder={'Course title'}/>
+                            : course.name}
+                    </div>
+                    <div>
+                        <b>Description: </b>
+                        {edit ?
                             <textarea {...register('description')} placeholder={'Describe course...'}/>
-                        </div> : course.description}
+                            : course.description}
                     </div>
                     <div>
-                        <b>Price:</b>
+                        <b>Price: </b>
                         {edit ?
-                            <input {...register("price")} placeholder="Price"/> :
-                            course.price}
+                            <input {...register("price")} placeholder="Price"/>
+                            : course.price}
                     </div>
                     <div>
-                        <b>Beginning Date:</b>
+                        <b>Beginning Date: </b>
                         {edit ?
-                            <input {...register('dateOfBeginning')} placeholder={'Date'}/> : course.dateOfBeginning}
+                            <input {...register('dateOfBeginning')} placeholder={'Date'}/>
+                            : course.dateOfBeginning}
                     </div>
                 </div>
                 {edit && <input type="submit"/>}
@@ -50,6 +58,6 @@ const Course = ({course, changeOldCourse}: CourseType) => {
 
         </div>
 
-)
+    )
 }
 export default Course;

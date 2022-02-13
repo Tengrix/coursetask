@@ -1,6 +1,5 @@
 import s from './SearchImg.module.css'
-import {useHistory} from "react-router-dom";
-import {DataType} from "../../api/api";
+import {DataType} from "../../../types/Types";
 
 type ImgType = {
     images:DataType;
@@ -12,8 +11,6 @@ const SearchImg =  ({images,getPic,}:ImgType) => {
     const getPictures = () =>{
         getPic(images.id)
     }
-
-
     return(
         <span >
             <img className={s.newCourseImg} onClick={getPictures} src={images.urls.small} alt=""/>

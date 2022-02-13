@@ -1,5 +1,13 @@
-import axios from "axios";
-let clientId = 'TjmARGkpjfymTRCvG-FSEMuhTEz4V6_oSpITSpqmmEg'
+export type courseType = {
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+    dateOfBeginning: string;
+    picOfCourse: string;
+}
+export type sortType = 'price-high' | 'price-low' | 'date'
+
 export type DataType = {
     "id": string,
     "created_at": string,
@@ -17,11 +25,5 @@ export type DataType = {
         "regular": string,
         "small": string,
         "thumb": string
-    }
-}
-
-export const imgAPI = {
-    getImages(title: string, pageNumber: number, per_page: number){
-        return axios.get(`https://api.unsplash.com/search/photos?page=${pageNumber}&per_page=${per_page}&query=${title}&client_id=${clientId}`)
     }
 }

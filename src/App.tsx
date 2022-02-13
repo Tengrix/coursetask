@@ -8,35 +8,28 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./redux/redux";
 import {
-    addNewCourse,
-    changeCourse,
-    courseType,
-    deleteCourse,
-    filterCourses,
     getCourseImages,
     setFind,
     setListOfImages,
     setPic,
-    sortType
-} from "./redux/App-reducer";
-import {DataType} from "./api/api";
+} from "./redux/Img-reducer";
 import Header from "./Components/Header/Header";
-
+import {addNewCourse, changeCourse, deleteCourse, filterCourses, setSearch} from "./redux/Course-reducer";
+import {courseType, DataType, sortType} from "./types/Types";
+import s from './App.css'
 
 function App() {
     const dispatch = useDispatch()
-    const state = useSelector<AppRootStateType, courseType[]>(state => state.AppPage.course)
+    const state = useSelector<AppRootStateType, courseType[]>(state => state.CoursePage.course)
     const listOfImg = useSelector<AppRootStateType, DataType[]>(state => state.AppPage.listOfImg)
     const find = useSelector<AppRootStateType, boolean>(state => state.AppPage.find)
     const totalCountOfImg = useSelector<AppRootStateType, number>(state => state.AppPage.totalCountOfImg)
     const pic = useSelector<AppRootStateType, string>(state => state.AppPage.pic)
-    const sortTypes = useSelector<AppRootStateType, sortType>(state => state.AppPage.sortTypes)
+    const sortTypes = useSelector<AppRootStateType, sortType>(state => state.CoursePage.sortTypes)
 
-    console.log(state)
 
     useEffect(() => {
         dispatch(filterCourses({course: state, sort: sortTypes}))
-        console.log(sortTypes)
     }, [sortTypes])
 
     const delCourse = (id: number) => {
@@ -57,7 +50,10 @@ function App() {
         dispatch(setPic({pic: newPic[0].urls.full}))
         dispatch(setFind({value: false}))
     }
-    console.log(listOfImg)
+    const searchCourse = (title:string) => {
+        dispatch(setSearch({title}))
+    }
+    console.log(state)
     return (
         <div className={'App'}>
             <Header/>
@@ -68,6 +64,7 @@ function App() {
                             sortTypes={sortTypes}
                             courses={state}
                             delCourse={delCourse}
+                            searchCourse={searchCourse}
                         />
                     </Route>
                     <Route path="/course/:courseId">

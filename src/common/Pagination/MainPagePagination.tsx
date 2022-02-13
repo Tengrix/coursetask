@@ -1,5 +1,5 @@
 import React from 'react';
-import {courseType} from "../../redux/App-reducer";
+import {courseType} from "../../types/Types";
 type PaginationType = {
     portionNumber:number;
     setPortionNumber:(value:number)=>void;

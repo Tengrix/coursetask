@@ -1,7 +1,6 @@
 import {useState} from "react";
-import ImgPagination from "../CourseForm/Pagination/ImgPagination";
 import CourseForm from "../CourseForm/CourseForm";
-import {DataType} from "../../api/api";
+import {DataType} from "../../types/Types";
 
 
 type NewCourseType = {

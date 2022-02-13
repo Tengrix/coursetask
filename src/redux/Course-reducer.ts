@@ -1,26 +1,12 @@
-import {Dispatch} from "react";
-import {DataType, imgAPI} from "../api/api";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-
-export type courseType = {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    dateOfBeginning: string;
-    picOfCourse: string;
-}
-export type sortType = 'price-high' | 'price-low' | 'date'
-export type AppInitialStateType = {
+import {courseType, sortType} from "../types/Types";
+export type CourseInitialStateType = {
     course: courseType[];
-    find: boolean;
-    totalCountOfImg: number;
-    listOfImg: DataType[];
-    pic: string;
-    sortTypes: sortType
+    sortTypes: sortType;
+    searchTitle:string;
 }
-const AppInitialState: AppInitialStateType = {
-    course: [
+const courseInitialState:CourseInitialStateType = {
+    course:[
         {
             id: 6,
             name: 'Java',
@@ -70,17 +56,14 @@ const AppInitialState: AppInitialStateType = {
             picOfCourse: 'https://res.cloudinary.com/practicaldev/image/fetch/s--6McQQU7i--/c_imagga_scale,f_auto,fl_progressive,h_900,q_auto,w_1600/https://dev-to-uploads.s3.amazonaws.com/i/j4hwcf7lntmqyha7ras5.png'
         },
     ],
-    find: false,
-    totalCountOfImg: 0,
-    listOfImg: [],
-    pic: '',
-    sortTypes: 'date'
+    sortTypes: 'date',
+    searchTitle:''
 }
 
-const slice = createSlice({
-    name: 'AppReducer',
-    initialState: AppInitialState,
-    reducers: {
+export const slice = createSlice({
+    name:'Course-reducer',
+    initialState:courseInitialState,
+    reducers:{
         deleteCourse(state, action: PayloadAction<{ id: number }>) {
             const index = state.course.findIndex(el => el.id === action.payload.id)
             if(index > -1){
@@ -103,21 +86,6 @@ const slice = createSlice({
             }
             state.course.push({...newCourse})
         },
-        setListOfImages(state, action: PayloadAction<{ images: any }>) {
-            state.listOfImg = action.payload.images
-        },
-        setTotalAmountOfImages(state, action: PayloadAction<{ total: number }>) {
-            state.totalCountOfImg = action.payload.total
-        },
-        setFind(state, action: PayloadAction<{ value: boolean }>) {
-            state.find = action.payload.value
-        },
-        setPic(state, action: PayloadAction<{ pic: string }>) {
-            state.pic = action.payload.pic
-        },
-        setSort(state, action: PayloadAction<{ types: sortType }>) {
-            state.sortTypes = action.payload.types
-        },
         filterCourses(state, action: PayloadAction<{ course: courseType[], sort:sortType }>) {
             switch (action.payload.sort){
                 case "price-low":
@@ -134,31 +102,16 @@ const slice = createSlice({
                 default:
                     return state
             }
+        },
+        setSort(state, action: PayloadAction<{ types: sortType }>) {
+            state.sortTypes = action.payload.types
+        },
+        setSearch(state,action:PayloadAction<{title:string}>){
+            state.searchTitle = action.payload.title
+
         }
     }
 })
-export const {
-    deleteCourse,
-    addNewCourse,
-    filterCourses,
-    setListOfImages,
-    setPic,
-    setTotalAmountOfImages,
-    setSort,
-    setFind,
-    changeCourse
-} = slice.actions
-export const AppReducer = slice.reducer
 
-export const getCourseImages = (title: string, pageNumber: number, per_page: number) => {
-    return async (dispatch: Dispatch<any>) => {
-        try {
-            const response = await imgAPI.getImages(title, pageNumber, per_page)
-            dispatch(setListOfImages({images: response.data.results}))
-            dispatch(setTotalAmountOfImages({total: response.data.total}))
-            dispatch(setFind({value: true}))
-        } catch (e) {
-            console.log(`error: ${e}` )
-        }
-    }
-}
+export const {deleteCourse,changeCourse,addNewCourse,filterCourses,setSort,setSearch} = slice.actions
+export const CourseReducer = slice.reducer

@@ -1,6 +1,6 @@
 import {useParams} from "react-router-dom";
-import Course from '../Single Course/Course'
-import {courseType} from "../../redux/App-reducer";
+import Course from './Single Course/Course'
+import {courseType} from "../../types/Types";
 
 type coursesType = {
     courses: courseType[];

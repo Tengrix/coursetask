@@ -1,11 +1,13 @@
 import {combineReducers} from "redux";
-import {AppReducer} from "./App-reducer";
+import {ImgReducer} from "./Img-reducer";
 import thunkMiddleware from 'redux-thunk'
 import {configureStore} from "@reduxjs/toolkit";
+import {CourseReducer} from "./Course-reducer";
 
 
 const rootReducer = combineReducers({
-    AppPage: AppReducer
+    AppPage: ImgReducer,
+    CoursePage:CourseReducer
 })
 
 export const store = configureStore({
